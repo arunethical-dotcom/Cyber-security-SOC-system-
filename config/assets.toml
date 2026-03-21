@@ -1,0 +1,5 @@
+[criticality]
+"subnet:internal-a" = 2.0
+"user:admin"        = 2.0
+"device:dc01"        = 2.0
+default             = 1.0

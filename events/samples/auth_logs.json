@@ -1,0 +1,90 @@
+[
+  {
+    "timestamp": "2026-03-17T10:00:00Z",
+    "event_type": "login_success",
+    "username": "jsmith",
+    "source_ip": "192.168.1.100",
+    "destination_host": "server01",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:01:00Z",
+    "event_type": "login_failed",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:01:15Z",
+    "event_type": "login_failed",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:01:30Z",
+    "event_type": "login_failed",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:01:45Z",
+    "event_type": "login_failed",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:02:00Z",
+    "event_type": "login_failed",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:02:30Z",
+    "event_type": "login_success",
+    "username": "admin",
+    "source_ip": "10.0.0.50",
+    "destination_host": "dc01",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:05:00Z",
+    "event_type": "login_success",
+    "username": "dbadmin",
+    "source_ip": "192.168.1.105",
+    "destination_host": "dbserver01",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:10:00Z",
+    "event_type": "login_failed",
+    "username": "root",
+    "source_ip": "172.16.0.99",
+    "destination_host": "linuxsrv01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:10:05Z",
+    "event_type": "login_failed",
+    "username": "root",
+    "source_ip": "172.16.0.99",
+    "destination_host": "linuxsrv01",
+    "status": "failed"
+  },
+  {
+    "timestamp": "2026-03-17T10:10:10Z",
+    "event_type": "login_failed",
+    "username": "root",
+    "source_ip": "172.16.0.99",
+    "destination_host": "linuxsrv01",
+    "status": "failed"
+  }
+]

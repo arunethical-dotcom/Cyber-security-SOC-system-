@@ -1,0 +1,10 @@
+title: Possible Data Exfiltration
+logsource:
+  category: network
+detection:
+  condition: large_outbound
+  large_outbound:
+    EventType: Connect
+    Direction: Outbound
+    ByteVolume|gt: 10000000
+severity: critical

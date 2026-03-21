@@ -1,0 +1,9 @@
+[package]
+name = "entity-resolver"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+shared = { path = "../shared" }
+ipnetwork = "0.20"
+thiserror.workspace = true

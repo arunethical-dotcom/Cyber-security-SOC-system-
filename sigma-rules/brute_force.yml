@@ -1,0 +1,11 @@
+title: Brute Force Login Attempt
+logsource:
+  category: authentication
+detection:
+  condition: failed_logins
+  failed_logins:
+    EventType: Login
+    Status: Failed
+threshold: 5
+timewindow: 300
+severity: high

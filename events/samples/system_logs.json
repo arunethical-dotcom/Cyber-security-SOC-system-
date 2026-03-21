@@ -1,0 +1,99 @@
+[
+  {
+    "timestamp": "2026-03-17T10:00:00Z",
+    "event_type": "process_spawn",
+    "username": "jsmith",
+    "source_host": "workstation01",
+    "process_name": "cmd.exe",
+    "parent_process": "explorer.exe",
+    "command_line": "cmd.exe /c dir",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:02:00Z",
+    "event_type": "escalate",
+    "username": "admin",
+    "source_host": "dc01",
+    "process_name": "powershell.exe",
+    "target_level": "SYSTEM",
+    "command_line": "powershell -Command Start-Process cmd -Verb RunAs",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:05:00Z",
+    "event_type": "access",
+    "username": "admin",
+    "source_host": "dc01",
+    "resource": "C:\\Windows\\System32\\config\\SAM",
+    "operation": "read",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:10:00Z",
+    "event_type": "process_spawn",
+    "username": "guest",
+    "source_host": "workstation05",
+    "process_name": "mimikatz.exe",
+    "parent_process": "cmd.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:15:00Z",
+    "event_type": "escalate",
+    "username": "service_user",
+    "source_host": "appserver01",
+    "process_name": "exploit.exe",
+    "target_level": "SYSTEM",
+    "command_line": "exploit.exe -p win32k",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:20:00Z",
+    "event_type": "access",
+    "username": "service_user",
+    "source_host": "appserver01",
+    "resource": "C:\\SensitiveData\\customer_db.sql",
+    "operation": "read",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:25:00Z",
+    "event_type": "process_spawn",
+    "username": "backupSvc",
+    "source_host": "backup01",
+    "process_name": "at.exe",
+    "parent_process": "cmd.exe",
+    "command_line": "at 10:30 notepad.exe",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:30:00Z",
+    "event_type": "escalate",
+    "username": "jdoe",
+    "source_host": "workstation03",
+    "process_name": "psExec64.exe",
+    "target_level": "ADMINISTRATOR",
+    "command_line": "psExec64.exe -s cmd.exe",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:35:00Z",
+    "event_type": "access",
+    "username": "jdoe",
+    "source_host": "workstation03",
+    "resource": "\\\\fileserver01\\shares\\confidential",
+    "operation": "read",
+    "status": "success"
+  },
+  {
+    "timestamp": "2026-03-17T10:40:00Z",
+    "event_type": "process_spawn",
+    "username": "SYSTEM",
+    "source_host": "dc01",
+    "process_name": "mimikatz.exe",
+    "parent_process": "powershell.exe",
+    "command_line": "mimikatz.exe privilege::debug sekurlsa::krbtgt",
+    "status": "success"
+  }
+]

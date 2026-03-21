@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Incident Report - {{ incident.id }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+        }
+        .severity-{{ incident.severity|lower }} {
+            background: {% if incident.severity == 'CRITICAL' %}#dc2626{% elif incident.severity == 'HIGH' %}#ea580c{% elif incident.severity == 'MEDIUM' %}#ca8a04{% else %}#16a34a{% endif %};
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #1a1a2e;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+        .metric {
+            display: inline-block;
+            margin: 10px 20px 10px 0;
+        }
+        .metric-label {
+            font-weight: bold;
+            color: #6b7280;
+        }
+        .metric-value {
+            font-size: 1.2em;
+            color: #1a1a2e;
+        }
+        .chain-item {
+            background: #e5e7eb;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .entity-item {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .action-item {
+            margin: 10px 0;
+        }
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Security Incident Report</h1>
+        <span class="severity-{{ incident.severity|lower }}">{{ incident.severity }}</span>
+    </div>
+
+    <div class="card">
+        <h2>Incident Details</h2>
+        <div class="metric">
+            <span class="metric-label">ID:</span>
+            <span class="metric-value">{{ incident.id }}</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">Timestamp:</span>
+            <span class="metric-value">{{ incident.timestamp }}</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">CVSS:</span>
+            <span class="metric-value">{{ incident.cvss }}</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>MITRE ATT&CK Chain</h2>
+        {% for tactic in incident.chain %}
+        <span class="chain-item">{{ tactic }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Affected Entities</h2>
+        {% for entity in incident.entities %}
+        <span class="entity-item">{{ entity }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Signal Scores</h2>
+        <div class="metric">
+            <span class="metric-label">Sigma Score:</span>
+            <span class="metric-value">{{ "%.2f"|format(incident.sigma_score) }}</span>
+        </div>
+        <div class="metric">
+            <span class="metric-label">Z-Score:</span>
+            <span class="metric-value">{{ "%.2f"|format(incident.z_score) }}</span>
+        </div>
+        {% if incident.ioc_match %}
+        <div class="metric">
+            <span class="metric-label">IOC Match:</span>
+            <span class="metric-value">{{ incident.ioc_match }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>LLM Analysis</h2>
+        <p><strong>Type:</strong> {{ llm_output.incident_type }}</p>
+        <p><strong>Summary:</strong> {{ llm_output.summary }}</p>
+        
+        <h3>Recommended Actions</h3>
+        <ol>
+        {% for action in llm_output.recommended_actions %}
+        <li class="action-item">{{ action }}</li>
+        {% endfor %}
+        </ol>
+        
+        <p><em>{{ llm_output.confidence_caveat }}</em></p>
+    </div>
+
+    <div class="footer">
+        <p>Generated: {{ generated_at }}</p>
+        <p>AI-Assisted Local SOC</p>
+    </div>
+</body>
+</html>

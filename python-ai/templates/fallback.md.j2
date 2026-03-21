@@ -1,0 +1,43 @@
+# Security Incident Report
+
+**Incident ID:** {{ incident.id }}
+**Timestamp:** {{ incident.timestamp }}
+**Severity:** {{ incident.severity }}
+**CVSS:** {{ incident.cvss }}
+
+## MITRE ATT&CK Chain
+{% for tactic in incident.chain %}
+- {{ tactic }}
+{% endfor %}
+
+## Affected Entities
+{% for entity in incident.entities %}
+- {{ entity }}
+{% endfor %}
+
+## Signal Scores
+- Sigma Score: {{ "%.2f"|format(incident.sigma_score) }}
+- Z-Score: {{ "%.2f"|format(incident.z_score) }}
+{% if incident.ioc_match %}
+- IOC Match: {{ incident.ioc_match }}
+{% endif %}
+
+## LLM Analysis
+
+**Type:** {{ llm_output.incident_type }}
+**Severity:** {{ llm_output.severity }}
+
+### Summary
+{{ llm_output.summary }}
+
+### Recommended Actions
+{% for action in llm_output.recommended_actions %}
+{{ loop.index }}. {{ action }}
+{% endfor %}
+
+### Confidence Caveat
+{{ llm_output.confidence_caveat }}
+
+---
+Generated: {{ generated_at }}
+AI-Assisted Local SOC

@@ -1,0 +1,40 @@
+[workspace]
+members = [
+    "collector",
+    "normaliser",
+    "entity-resolver",
+    "baseline",
+    "detector",
+    "graph",
+    "correlator",
+    "api-server",
+    "shared",
+    "event-input",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[workspace.dependencies]
+tokio = { version = "1.35", features = ["full"] }
+axum = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+rusqlite = { version = "0.31", features = ["bundled"] }
+petgraph = "0.6"
+bloomfilter = "2.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+thiserror = "1.0"
+anyhow = "1.0"
+config = "0.14"
+notify = "6.1"
+reqwest = { version = "0.11", features = ["json"] }
+nom = "7.1"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors"] }
+ipnetwork = "0.20"

@@ -1,0 +1,9 @@
+[package]
+name = "normaliser"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+shared = { path = "../shared" }
+entity-resolver = { path = "../entity-resolver" }
+collector = { path = "../collector" }

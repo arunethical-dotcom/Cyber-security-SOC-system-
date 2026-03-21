@@ -1,0 +1,14 @@
+[detection]
+sigma_weight    = 0.5
+anomaly_weight  = 0.3
+ioc_weight      = 0.2
+ioc_score_floor = 0.8
+graph_min_score = 0.4
+alert_min_score = 0.7
+
+[correlation]
+max_chain_window_secs      = 600
+lateral_move_window_secs   = 900
+priv_esc_window_secs       = 300
+brute_force_min_attempts   = 5
+exfil_min_zscore           = 4.0

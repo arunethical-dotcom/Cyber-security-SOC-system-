@@ -1,0 +1,9 @@
+[package]
+name = "baseline"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+shared = { path = "../shared" }
+rusqlite.workspace = true
+tracing.workspace = true

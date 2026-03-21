@@ -1,0 +1,41 @@
+# Event Stream Configuration
+# This file is monitored by the Rust collector for new events
+
+[stream]
+mode = "jsonl"
+path = "events/streams/event_stream.jsonl"
+poll_interval_ms = 1000
+
+[generator]
+default_interval = 1.0
+default_mode = "mixed"
+
+[attack_scenarios]
+brute_force = {
+    enabled = true,
+    interval_events = 15,
+    probability = 0.2
+}
+
+lateral_movement = {
+    enabled = true,
+    interval_events = 20,
+    probability = 0.15
+}
+
+exfiltration = {
+    enabled = true,
+    interval_events = 25,
+    probability = 0.1
+}
+
+privilege_escalation = {
+    enabled = true,
+    interval_events = 18,
+    probability = 0.15
+}
+
+[normal_events]
+auth_ratio = 0.4
+network_ratio = 0.3
+system_ratio = 0.3

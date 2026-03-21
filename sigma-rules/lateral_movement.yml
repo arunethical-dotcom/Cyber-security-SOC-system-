@@ -1,0 +1,10 @@
+title: Lateral Movement via Remote Login
+logsource:
+  category: authentication
+detection:
+  condition: remote_login
+  remote_login:
+    EventType: Login
+    Status: Success
+    IsRemote: true
+severity: medium

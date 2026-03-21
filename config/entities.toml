@@ -1,0 +1,9 @@
+[aliases]
+"ADMIN"          = "user:admin"
+"DOMAIN\\admin"  = "user:admin"
+"Administrator"  = "user:admin"
+
+[cidr_groups]
+"10.0.0.0/8"     = "subnet:internal-a"
+"192.168.0.0/16" = "subnet:internal-b"
+"172.16.0.0/12"  = "subnet:internal-c"

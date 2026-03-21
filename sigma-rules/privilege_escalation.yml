@@ -1,0 +1,8 @@
+title: Privilege Escalation Attempt
+logsource:
+  category: process
+detection:
+  condition: escalate_event
+  escalate_event:
+    EventType: Escalate
+severity: high

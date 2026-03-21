@@ -1,0 +1,13 @@
+[package]
+name = "collector"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+shared = { path = "../shared" }
+entity-resolver = { path = "../entity-resolver" }
+tokio.workspace = true
+notify.workspace = true
+tracing.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
