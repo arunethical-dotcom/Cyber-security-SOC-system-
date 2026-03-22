@@ -4,13 +4,44 @@ use shared::{CanonicalEvent, EventType};
 use std::collections::HashMap;
 use std::fs;
 use std::hash::{Hash, Hasher};
-use std::sync::{Arc, RwLock};
+use std::sync::{Arc, Mutex, RwLock};
+use std::time::{Duration, Instant};
 use tracing::info;
+
+/// Cache for IOC lookup results with 1-hour TTL
+pub struct IocCache {
+    store: HashMap<String, (f32, Instant)>,
+    ttl: Duration,
+}
+
+impl IocCache {
+    pub fn new() -> Self {
+        Self {
+            store: HashMap::new(),
+            ttl: Duration::from_secs(3600), // 1 hour
+        }
+    }
+
+    pub fn get(&self, ip: &str) -> Option<f32> {
+        if let Some((score, inserted_at)) = self.store.get(ip) {
+            if inserted_at.elapsed() < self.ttl {
+                return Some(*score);
+            }
+        }
+        None
+    }
+
+    pub fn set(&mut self, ip: String, score: f32) {
+        self.store.insert(ip, (score, Instant::now()));
+    }
+}
 
 pub struct Detector {
     sigma_rules: Vec<SigmaRule>,
     baseline_store: Arc<BaselineStore>,
     ioc_bloom: Arc<RwLock<Bloom<String>>>,
+    ioc_cache: Arc<Mutex<IocCache>>,
+    abuseipdb_key: String,
     thresholds: DetectionThresholds,
 }
 
@@ -175,6 +206,8 @@ impl Detector {
             sigma_rules: Vec::new(),
             baseline_store,
             ioc_bloom: Arc::new(RwLock::new(Bloom::new(10000, 4))),
+            ioc_cache: Arc::new(Mutex::new(IocCache::new())),
+            abuseipdb_key: std::env::var("ABUSEIPDB_KEY").unwrap_or_default(),
             thresholds: DetectionThresholds::default(),
         }
     }
@@ -288,6 +321,81 @@ impl Detector {
         }
 
         0.0
+    }
+
+    /// Async IOC check against AbuseIPDB with local caching
+    pub async fn check_ioc(&self, ip: &str) -> f32 {
+        // Skip private IPs
+        if self.is_private_ip(ip) {
+            return 0.0;
+        }
+
+        // Check cache first
+        {
+            let cache = self.ioc_cache.lock().unwrap();
+            if let Some(cached_score) = cache.get(ip) {
+                return cached_score;
+            }
+        }
+
+        // If no API key configured, return 0 gracefully
+        if self.abuseipdb_key.is_empty() {
+            return 0.0;
+        }
+
+        // Call AbuseIPDB API
+        let score = self.call_abuseipdb_api(ip).await;
+
+        // Cache the result
+        {
+            let mut cache = self.ioc_cache.lock().unwrap();
+            cache.set(ip.to_string(), score);
+        }
+
+        score
+    }
+
+    fn is_private_ip(&self, ip: &str) -> bool {
+        ip.starts_with("192.168.")
+            || ip.starts_with("10.")
+            || ip.starts_with("172.16.")
+            || ip.starts_with("127.")
+            || ip == "localhost"
+    }
+
+    async fn call_abuseipdb_api(&self, ip: &str) -> f32 {
+        let client = match reqwest::Client::builder()
+            .timeout(std::time::Duration::from_secs(3))
+            .build()
+        {
+            Ok(c) => c,
+            Err(_) => return 0.0,
+        };
+
+        let url = format!(
+            "https://api.abuseipdb.com/api/v2/check?ipAddress={}&maxAgeInDays=30",
+            ip
+        );
+
+        match client
+            .get(&url)
+            .header("Key", &self.abuseipdb_key)
+            .send()
+            .await
+        {
+            Ok(response) => match response.json::<serde_json::Value>().await {
+                Ok(json) => {
+                    if let Some(data) = json.get("data") {
+                        if let Some(score) = data.get("abuseConfidenceScore").and_then(|v| v.as_f64()) {
+                            return (score / 100.0) as f32;
+                        }
+                    }
+                    0.0
+                }
+                Err(_) => 0.0,
+            },
+            Err(_) => 0.0,
+        }
     }
 }
 

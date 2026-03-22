@@ -89,6 +89,7 @@ dependencies = [
  "correlator",
  "detector",
  "graph",
+ "reqwest",
  "serde",
  "serde_json",
  "shared",
@@ -383,9 +384,11 @@ version = "0.1.0"
 dependencies = [
  "baseline",
  "bloomfilter",
+ "reqwest",
  "serde",
  "serde_json",
  "shared",
+ "tokio",
  "tracing",
 ]
 
